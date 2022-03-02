@@ -1,22 +1,39 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <WrTable  :transactions="transactions"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Axios from 'axios'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    WrTable: () => import('./components/WrTable.vue')
+  },
+  data(){
+    return{
+      transactions: []
+    }
+  },
+  created(){
+    this.getTransactions()
+  },
+  methods:{
+    async getTransactions(){
+      let request = await Axios.get('https://warren-transactions-api.herokuapp.com/api/transactions')
+      this.transactions = request.data
+    }
   }
 }
+
 </script>
 
 <style>
+*{
+  box-sizing: border-box;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
