@@ -1,36 +1,19 @@
 <template>
   <div id="app">
-    <WrTable  :transactions="transactions"/>
+   <IndexPage/>
   </div>
 </template>
 
 <script>
-import Axios from 'axios'
-
 export default {
   name: 'App',
   components: {
-    WrTable: () => import('./components/WrTable.vue')
+    IndexPage: () => import('./views/IndexPage.vue')
   },
-  data(){
-    return{
-      transactions: []
-    }
-  },
-  created(){
-    this.getTransactions()
-  },
-  methods:{
-    async getTransactions(){
-      let request = await Axios.get('https://warren-transactions-api.herokuapp.com/api/transactions')
-      this.transactions = request.data
-    }
-  }
 }
-
 </script>
 
-<style>
+<style lang="scss">
 *{
   box-sizing: border-box;
 }
@@ -40,6 +23,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

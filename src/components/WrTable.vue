@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-wrapper">
     <table class="table">
       <thead>
       <tr>
@@ -10,7 +10,7 @@
       </tr>
       </thead>
     <tbody>
-      <tr v-for="item in filteredTransactions" :key="item.id">
+      <tr v-for="item in filteredTransactions" :key="item.id" class="clickable" @click="$emit('showTransactionDetails', item.id)">
         <td>{{ item.title }}</td>
         <td>{{ item.description }}</td>
         <td>{{ item.status }}</td>
@@ -59,17 +59,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table{
-  border-spacing: 0;
-  border: 0.5px solid black;
-  thead{
-    background: lightgray;
-  }
-  tr:nth-child(even){
-    background: #ececec;
-  }
-  th, td{
-   padding: 10px;
+.table-wrapper{
+  display: flex;
+  justify-content: center;
+  table{
+    border-spacing: 0 10px;
+    thead{
+      background: lightgray;
+    }
+    tr{
+      &:hover{
+        background: lightgray !important;
+      }
+      &:nth-child(even){
+        background: #ececec;
+      }
+    }
+    th, td{
+      padding: 15px;
+    }
+    .clickable{
+      cursor: pointer;
+    }
   }
 }
 </style>
