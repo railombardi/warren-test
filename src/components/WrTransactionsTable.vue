@@ -10,10 +10,10 @@
       </tr>
       </thead>
     <tbody>
-      <tr v-for="item in filteredTransactions" :key="item.id" class="clickable" @click="$emit('showTransactionDetails', item.id)">
+      <tr v-for="item in filteredTransactions" :key="item.id" class="clickable" @click="$emit('showTransactionDetails', item)">
         <td>{{ item.title }}</td>
         <td>{{ item.description }}</td>
-        <td>{{ item.status }}</td>
+        <td>{{ $t(item.status) }}</td>
         <td>{{ item.amount | currency }}</td>
       </tr>
     </tbody>
@@ -63,7 +63,8 @@ export default {
   display: flex;
   justify-content: center;
   table{
-    border-spacing: 0 10px;
+    border: 1px solid lightgray;
+    border-spacing: 0;
     thead{
       background: lightgray;
     }
