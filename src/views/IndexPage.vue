@@ -1,7 +1,22 @@
 <template>
   <div>
-    <WrTable  :transactions="transactions" @showTransactionDetails="openTransactionModal"/>
-    <WrTransactionsModal :transactionId="selectedTransactionId" v-if="showModal" @close="closeModal"/>
+    <div>
+      
+    </div>
+    <WrTransactionsTable  :transactions="transactions" @showTransactionDetails="openTransactionModal"/>
+    <WrTransactionsModal v-if="showModal" :title="selectedTransaction.title" @close="closeModal">
+      <template>
+        <div>
+          <WrStepper :steps="statusList" :activeStep="transactionStatus"/>
+          <div>
+            <WrExtract :title="'Transferindo de'" :description="selectedTransaction.from" :value="selectedTransaction.amount" />
+          </div>
+          <div>
+            <WrExtract :title="'Para'" :description="selectedTransaction.to" :value="selectedTransaction.amount" />
+          </div>
+        </div>
+      </template>
+    </WrTransactionsModal>
   </div>
 </template>
 
@@ -10,14 +25,28 @@ import Axios from 'axios'
 
 export default {
   components: {
-    WrTable: () => import('../components/WrTable.vue'),
-    WrTransactionsModal: () => import('../components/WrTransactionsModal.vue')
+    WrTransactionsTable: () => import('../components/WrTransactionsTable.vue'),
+    WrTransactionsModal: () => import('../components/WrTransactionsModal.vue'),
+    WrStepper: () => import('../components/WrStepper.vue'),
+    WrExtract: () => import('../components/WrExtract.vue')
   },
   data(){
     return{
       transactions: [],
       showModal: false,
-      selectedTransactionId: null
+      selectedTransaction: null
+    }
+  },
+  computed:{
+    statusList(){
+      return [
+        'created',
+        'processing',
+        'processed'
+      ]
+    },
+    transactionStatus(){
+      return this.selectedTransaction ? this.selectedTransaction.status : ''
     }
   },
   created(){
@@ -28,8 +57,12 @@ export default {
       let request = await Axios.get('https://warren-transactions-api.herokuapp.com/api/transactions')
       this.transactions = request.data
     },
-    openTransactionModal(id){
-      this.selectedTransactionId = id
+    async getTransaction(transactionId){
+      let request = await Axios.get(`https://warren-transactions-api.herokuapp.com/api/transactions/${transactionId}`)
+      return request.data
+    },
+    async openTransactionModal(transaction){
+      this.selectedTransaction = await this.getTransaction(transaction.id)
       this.showModal = !this.showModal
     },
     closeModal(){
