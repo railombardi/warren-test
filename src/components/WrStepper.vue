@@ -1,7 +1,7 @@
 <template>
   <ol class="wr-stepper">
     <li v-for="(step, index) in steps" :key="step" :class="isActiveStep(index) ? 'wr-stepper-item active' : 'wr-stepper-item'">
-        <h4 class="wr-stepper-title">{{step}}</h4>
+        <h4 class="wr-stepper-title">{{$t(step)}}</h4>
     </li>
 </ol>
 </template>
