@@ -3,19 +3,57 @@
     <div class="wr-modal-wrapper">
       <div class="wr-modal-container">
         <div class="wr-modal-container-header">
-          <h2>Resgate</h2>
+          <h2>{{modalTitle}}</h2>
           <WrIconSvg name="close" @click="emitClose"/>
         </div>
+        <WrStepper :steps="statusList" :activeStep="transactionStatus"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import WrIconSvg from './WrIconSvg.vue'
+import Axios from 'axios'
+
 export default {
-  components: { WrIconSvg },
+  components: { 
+    WrIconSvg: () => import('./WrIconSvg.vue'),
+    WrStepper: () => import('./WrStepper.vue')
+  },
+  props:{
+    transactionId:{
+      type: String,
+      required: true
+    }
+  },
+  data(){
+    return{
+      transaction: null
+    }
+  },
+  computed:{
+    modalTitle(){
+      return this.transaction ? this.transaction.title : ''
+    },
+    statusList(){
+      return [
+        'created',
+        'processing',
+        'processed'
+      ]
+    },
+    transactionStatus(){
+      return this.transaction ? this.transaction.status : ''
+    }
+  },
+  created(){
+    this.getTransaction()
+  },
   methods:{
+    async getTransaction(){
+      let request = await Axios.get(`https://warren-transactions-api.herokuapp.com/api/transactions/${this.transactionId}`)
+      this.transaction = request.data
+    },
     emitClose(){
       this.$emit('close')
     }
@@ -47,7 +85,7 @@ export default {
     border-radius: 6px;
     padding: 24px;
     margin: auto;
-    width: 500px;
+    width: 800px;
     &-header{
       display: flex;
       justify-content: space-between;
