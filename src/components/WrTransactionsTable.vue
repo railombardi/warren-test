@@ -1,6 +1,6 @@
 <template>
   <div class="table-wrapper">
-    <table class="table">
+    <table class="table" v-if="filteredTransactions.length > 0">
       <thead>
       <tr>
         <th scope="col">Título</th>
@@ -18,6 +18,7 @@
       </tr>
     </tbody>
   </table>
+  <h2 v-else>Não há nenhum item correspondente a sua pesquisa</h2>
   </div>
 </template>
 
@@ -59,11 +60,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../assets/scss/breakpoints.scss';
+
 .table-wrapper{
-  display: flex;
-  justify-content: center;
   table{
-    border: 1px solid lightgray;
+    width: 100%;
+    border: 2px solid lightgray;
     border-spacing: 0;
     thead{
       background: lightgray;
@@ -78,6 +80,9 @@ export default {
     }
     th, td{
       padding: 15px;
+      @include mobile(){
+        font-size: 10px;
+      }
     }
     .clickable{
       cursor: pointer;
