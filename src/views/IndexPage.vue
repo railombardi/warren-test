@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <div>
-      
+  <div class="index-page">
+    <div class="index-page-inputs">
+      <WrInput placeholder="Pesquise pelo título" @input="inputSearch = $event"/>
+      <WrSelect @input="statusFilter = $event" :options="statusList"/>
     </div>
-    <WrTransactionsTable  :transactions="transactions" @showTransactionDetails="openTransactionModal"/>
+    <WrTransactionsTable :filterByStatus="statusFilter" :searchValue="inputSearch"  :transactions="transactions" @showTransactionDetails="openTransactionModal"/>
     <WrTransactionsModal v-if="showModal" :title="selectedTransaction.title" @close="closeModal">
       <template>
         <div>
@@ -28,13 +29,17 @@ export default {
     WrTransactionsTable: () => import('../components/WrTransactionsTable.vue'),
     WrTransactionsModal: () => import('../components/WrTransactionsModal.vue'),
     WrStepper: () => import('../components/WrStepper.vue'),
-    WrExtract: () => import('../components/WrExtract.vue')
+    WrExtract: () => import('../components/WrExtract.vue'),
+    WrInput: () => import('../components/WrInput.vue'),
+    WrSelect: () => import('../components/WrSelect.vue')
   },
   data(){
     return{
       transactions: [],
       showModal: false,
-      selectedTransaction: null
+      selectedTransaction: null,
+      inputSearch: null,
+      statusFilter: null
     }
   },
   computed:{
@@ -73,3 +78,21 @@ export default {
 }
 
 </script>
+<style lang="scss" scoped>
+@import '../assets/scss/breakpoints.scss';
+
+.index-page{
+  padding: 24px 64px;
+  @include mobile(){
+    padding: 24px 0;
+  }
+  &-inputs{
+    display: flex;
+    padding-bottom: 24px;
+    column-gap: 32px;
+    @include mobile(){
+      justify-content: center;
+    }
+  }
+}
+</style>
